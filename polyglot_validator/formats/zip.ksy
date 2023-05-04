@@ -7,7 +7,8 @@ seq:
     type: polyglot
   - id: sections
     type: pk_section
-    repeat: eos
+    repeat: until
+    repeat-until: _io.eof or _.section_type == 0x0605
 types:
   pk_section:
     seq:

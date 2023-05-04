@@ -16,14 +16,16 @@ class Zip(KaitaiStruct):
         self._read()
 
     def _read(self):
-        self.top = polyglot.Polyglot(self._io, [b"\x50", b"\x4B", b"\x03",
+        self.top = polyglot.Polyglot(self._io, [b"\x50", b"\x4b", b"\x03",
                                                 b"\x04"])
         self.sections = []
         i = 0
-        while not self._io.is_eof():
-            self.sections.append(Zip.PkSection(self._io, self, self._root))
+        while True:
+            _ = Zip.PkSection(self._io, self, self._root)
+            self.sections.append(_)
+            if  ((self._io.is_eof()) or (_.section_type == 1541)) :
+                break
             i += 1
-
 
     class LocalFile(KaitaiStruct):
         def __init__(self, _io, _parent=None, _root=None):
